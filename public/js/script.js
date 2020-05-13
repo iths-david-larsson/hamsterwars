@@ -1,9 +1,9 @@
 firebase.initializeApp({
-    apiKey: "AIzaSyAHFQEHkjdigK1SGrYLAxpKNiEG4j9pmKs",
+    apiKey: process.env.API_KEY,
     authDomain: "hamsterwarsiths.firebaseapp.com",
-    databaseURL: "https://hamsterwarsiths.firebaseio.com",
+    databaseURL: process.env.DB_URL,
     projectId: "hamsterwarsiths",
-    storageBucket: "hamsterwarsiths.appspot.com",
+    storageBucket: process.env.STORAGE_BUCKET,
     messagingSenderId: "266291692865",
     appId: "1:266291692865:web:aa5116c7fd62ccd2a98dc0"
 });

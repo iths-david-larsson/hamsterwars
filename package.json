@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/iths-david-larsson/hamsterwars#readme",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "firebase": "^7.14.3",
     "firebase-admin": "^8.12.0"
   }
 }
