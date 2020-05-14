@@ -2,6 +2,7 @@ const { Router } = require('express');
 const router = new Router;
 const { db } = require('./../firebase');
 
+//Langa alla tidigare match-object
 router.get('/', async (req, res) => {
     let recentGames = [];
 
@@ -16,9 +17,8 @@ router.get('/', async (req, res) => {
     res.send(recentGames);
 });
 
+//Posta ett nytt match/game-object
 router.post('/', async (req, res) => {
-
-    console.log(JSON.stringify(req.body))
     let recentGames = [];
 
     let games = await db
@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
         recentGames.push(game.data())
     );
     let newId = recentGames.length + 1
-
+    //Formaterar datumet som sätts i databasen
     let date = new Date();
     var dd = String(date.getDate()).padStart(2, '0');
     var mm = String(date.getMonth() + 1).padStart(2, '0');
@@ -37,9 +37,8 @@ router.post('/', async (req, res) => {
     var curHour = date.getHours() > 12 ? date.getHours() - 12 : (date.getHours() < 10 ? "0" + date.getHours() : date.getHours());
     var curMinute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
     var curSeconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
-
     date = 'Date ' + mm + '/' + dd + '/' + yyyy + " - Time: " + curHour + ':' + curMinute + ':' + curSeconds;
-
+    //Skicka till DB
     await db.collection('games').doc(`${newId}`).set(
         {
             id: newId,
@@ -48,6 +47,6 @@ router.post('/', async (req, res) => {
             winner: req.body.winner
         }
     )
-    res.send({ msg: "New game added." })
+    res.status(200).send({ msg: "New game added." })
 })
 module.exports = router;

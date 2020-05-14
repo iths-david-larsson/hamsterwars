@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const router = new Router;
-const { db } = require('./../firebase');
+const { db, storage } = require('./../firebase');
 const fs = require('fs');
 
 //Hämta datan från data.json och ladda upp det i databasen
@@ -28,21 +28,12 @@ const fs = require('fs');
 // })
 ////////////////////////////////////////////////////////////////
 
-router.get('/', async (req, res) => {
-    let hamstersRef = await db.collection('hamsters');
-    let query = hamstersRef.get()
-        .then(snapshot => {
-            if (snapshot.empty) {
-                console.log('Nothing to get here');
-                return;
-            }
 
-            let assetsToReturn = [];
-            snapshot.forEach(doc => {
-                assetsToReturn.push(doc.data().imgName);
-            });
-            res.send(assetsToReturn)
-        })
+// Downloads IMG from storage
+router.get('/:imgname', async (req, res) => {
+    let imgFromStorage = await storage.bucket().file(`Hamsters/${req.params.imgname}`).download();
+    let img = Buffer.concat(imgFromStorage);
+    res.send(img);
 })
 
 

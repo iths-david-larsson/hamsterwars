@@ -2,6 +2,7 @@ const { Router } = require('express');
 const router = new Router;
 const { db } = require('./../firebase');
 
+//Langa alla hamsters som finns
 router.get('/', async (req, res) => {
     let hamstersRef = db.collection('hamsters');
     let query = hamstersRef.get()
@@ -18,6 +19,8 @@ router.get('/', async (req, res) => {
             res.send(hamstersToReturn)
         })
 });
+
+//Get random hamster
 router.get('/random', async (req, res) => {
     let hamstersRef = db.collection('hamsters');
     let query = hamstersRef.get()
@@ -31,11 +34,11 @@ router.get('/random', async (req, res) => {
                 hamsters.push(doc.data());
             });
             let randomHamster = hamsters[Math.floor(Math.random() * hamsters.length)];
-            res.send(randomHamster)
+            res.status(200).send(randomHamster)
         })
 });
 
-
+//Hämsta enskild hamster-object
 router.get('/:id', async (req, res) => {
     let hamstersRef = db.collection('hamsters');
     let query = hamstersRef.get()
@@ -50,10 +53,11 @@ router.get('/:id', async (req, res) => {
                     hamsterToReturn.push(doc.data());
                 }
             });
-            res.send(hamsterToReturn);
+            res.status(200).send(hamsterToReturn);
         })
 });
 
+//Uppdatera win/defeat och games för hamster i DB
 router.put('/:id/:result', async (req, res) => {
     try {
         if (req.params.result === "win") {
@@ -65,7 +69,7 @@ router.put('/:id/:result', async (req, res) => {
                 wins: newWinValue,
                 games: newGamesValue
             });
-            res.send({ msg: `Hamster with id:${req.params.id} has been updated in DB.` })
+            res.status(200).send({ msg: `Hamster with id:${req.params.id} has been updated in DB.` })
         } else {
             let getDefeatsFromDb = db.collection('hamsters').doc(req.params.id).get();
             let newDefeatsValue = (await getDefeatsFromDb).data().games - 1
@@ -75,7 +79,7 @@ router.put('/:id/:result', async (req, res) => {
                 defeats: newDefeatsValue,
                 games: newGamesValue
             });
-            res.send({ msg: `Hamster with id:${req.params.id} has been updated in DB.` })
+            res.status(200).send({ msg: `Hamster with id:${req.params.id} has been updated in DB.` })
         }
     }
     catch {
@@ -84,5 +88,39 @@ router.put('/:id/:result', async (req, res) => {
         }
     }
 });
+
+//Lägg till ny hamster
+router.post('/', async (req, res) => {
+    //Ta fram nästa unika ID att sätta på det nya hamster-objectet;
+    let numberOfHamsters = [];
+    let hamsters = await db
+        .collection('hamsters')
+        .get()
+
+    hamsters.forEach(hamster =>
+        numberOfHamsters.push(hamster.data())
+    );
+    let newId = numberOfHamsters.length + 1
+    //Skicka in nya objektet i DB. 
+    let data = req.body;
+    console.log(data)
+    await db.collection('hamsters').doc(`${newId}`).set({
+        id: newId,
+        name: data.name,
+        age: data.age,
+        favFood: data.favFood,
+        loves: data.loves,
+        imgName: data.imgName,
+        wins: data.wins,
+        defeats: data.defeats,
+        games: data.games
+    })
+    //Skicka tillbaka meddelande och objektet som du precis lagt till.
+    let addedObject = await db.collection('hamsters').doc(`${newId}`).get();
+    res.status(200).send({
+        msg: "hamster added",
+        object: addedObject.data()
+    })
+})
 
 module.exports = router;

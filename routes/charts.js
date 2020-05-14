@@ -3,7 +3,7 @@ const router = new Router;
 const { db } = require('./../firebase');
 
 
-
+//Langa topp-listan över vinster
 router.get('/top', async (req, res) => {
     let hamstersRef = db.collection('hamsters');
     let query = hamstersRef.get()
@@ -20,15 +20,16 @@ router.get('/top', async (req, res) => {
             let sortedHamsters = hamsters.sort(function (a, b) {
                 return b.wins - a.wins
             })
-            console.log(sortedHamsters)
+
             let topFive = [];
             for (i = 0; i < 5; i++) {
                 topFive.push(sortedHamsters[i])
             }
-            res.send(topFive)
+            res.status(200).send(topFive)
         })
 })
 
+//Langa topp-listan över mest defeats 
 router.get('/bottom', async (req, res) => {
     let hamstersRef = db.collection('hamsters');
     let query = hamstersRef.get()
@@ -45,12 +46,12 @@ router.get('/bottom', async (req, res) => {
             let sortedHamsters = hamsters.sort(function (a, b) {
                 return b.defeats - a.defeats
             })
-            console.log(sortedHamsters)
+
             let lastFive = [];
             for (i = 0; i < 5; i++) {
                 lastFive.push(sortedHamsters[i])
             }
-            res.send(lastFive)
+            res.status(200).send(lastFive)
         })
 })
 module.exports = router;

@@ -2,6 +2,7 @@ const { Router } = require('express');
 const router = new Router;
 const { db } = require('./../firebase');
 
+// Langa antal tidigare matcher som spelats
 router.get('/', async (req, res) => {
     let recentGames = [];
 
@@ -14,7 +15,7 @@ router.get('/', async (req, res) => {
     );
     let numberOfGames = recentGames.length
 
-    res.send({ msg: `There are currently ${numberOfGames} games played.` });
+    res.status(200).send({ msg: `There are currently ${numberOfGames} games played.` });
 });
 
 
