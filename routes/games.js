@@ -34,11 +34,12 @@ router.post('/', async (req, res) => {
     var dd = String(date.getDate()).padStart(2, '0');
     var mm = String(date.getMonth() + 1).padStart(2, '0');
     var yyyy = date.getFullYear();
-    curHour = date.getHours() > 12 ? date.getHours() - 12 : (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()),
-        curMinute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes(),
-        curSeconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds(),
+    var curHour = date.getHours() > 12 ? date.getHours() - 12 : (date.getHours() < 10 ? "0" + date.getHours() : date.getHours());
+    var curMinute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+    var curSeconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
 
-        date = 'Date ' + mm + '/' + dd + '/' + yyyy + " - Time: " + curHour + ':' + curMinute + ':' + curSeconds;
+    date = 'Date ' + mm + '/' + dd + '/' + yyyy + " - Time: " + curHour + ':' + curMinute + ':' + curSeconds;
+
     await db.collection('games').doc(`${newId}`).set(
         {
             id: newId,
