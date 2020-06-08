@@ -1,0 +1,5 @@
+Länk:
+https://github.com/iths-david-larsson/hamsterwars
+
+API-Key: AIzaSyAHFQEHkjdigK1SGrYLAxpKNiEG4j9pmKs
+(finns även i .env)
