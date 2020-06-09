@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
                 hamstersToReturn.push(doc.data());
             });
 
-            res.send(hamstersToReturn)
+            res.status(200).send(hamstersToReturn);
         })
 });
 

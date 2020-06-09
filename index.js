@@ -1,7 +1,9 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 require('dotenv').config()
 
+app.use(cors()); //Förhindra problem med CORS
 app.use(express.json());
 app.use(express.static('./public'));
 //Authorize med API KEY
@@ -39,6 +41,6 @@ app.use('/stats', statsRoute);
 
 
 //Sätt på öronen
-app.listen(3000, () => {
+app.listen(4000, () => {
     console.log("Hamster server is up, and it's running!")
 });
