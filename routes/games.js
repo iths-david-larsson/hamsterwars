@@ -20,7 +20,6 @@ router.get('/', async (req, res) => {
 //Posta ett nytt match/game-object
 router.post('/', async (req, res) => {
     let recentGames = [];
-
     let games = await db
         .collection('games')
         .get();
@@ -47,6 +46,7 @@ router.post('/', async (req, res) => {
             winner: req.body.winner
         }
     )
+
     res.status(200).send({ msg: "New game added." })
 })
 module.exports = router;
