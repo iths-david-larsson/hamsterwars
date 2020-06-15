@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const router = new Router;
-const { db } = require('./../firebase');
+const { db, storage } = require('./../firebase');
+const fs = require('fs')
 
 //Langa alla hamsters som finns
 router.get('/', async (req, res) => {
@@ -103,6 +104,7 @@ router.post('/', async (req, res) => {
     let newId = numberOfHamsters.length + 1
     //Skicka in nya objektet i DB. 
     let data = req.body;
+
     console.log(data)
     await db.collection('hamsters').doc(`${newId}`).set({
         id: newId,
@@ -111,9 +113,9 @@ router.post('/', async (req, res) => {
         favFood: data.favFood,
         loves: data.loves,
         imgName: data.imgName,
-        wins: data.wins,
-        defeats: data.defeats,
-        games: data.games
+        wins: 0,
+        defeats: 0,
+        games: 0
     })
     //Skicka tillbaka meddelande och objektet som du precis lagt till.
     let addedObject = await db.collection('hamsters').doc(`${newId}`).get();
